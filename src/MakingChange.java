@@ -3,7 +3,7 @@
  * given a set of coins, how many ways can you make change for a target amount?
  *
  * @author Zach Blick
- * @author [YOUR NAME HERE]
+ * @author Vikram Saluja
  */
 
 public class MakingChange {
@@ -14,4 +14,5 @@ public class MakingChange {
     public static long countWays(int target, int[] coins) {
         return 0;
     }
+
 }
