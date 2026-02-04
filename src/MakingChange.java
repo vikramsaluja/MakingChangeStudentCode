@@ -56,7 +56,7 @@ public class MakingChange {
             return 0;
         }
 
-        // If this subproblem has already been solved then reuse it.
+        // If this sub problem has already been solved then reuse it.
         if (memoization[coinIndex][sum] != -1L) {
             return memoization[coinIndex][sum];
         }
@@ -71,27 +71,38 @@ public class MakingChange {
         memoization[coinIndex][sum] = include + exclude;
         return memoization[coinIndex][sum];
     }
+    public static long countWaysTabulation(int target, int[] coins) {
 
-    public static long countWaysTabulation(int target, int[] coins){
+        int numCoins= coins.length;
 
-        // Represent the number of ways to make sum
-        long[] ways = new long[target + 1];
+        // Create a 2D array where rows are amounts from 0 to target
+        // Columns represent which coin index we are allowed to use
+        long[][] ways = new long[target + 1][numCoins + 1];
 
+        // Base case because there is 1 way to make 0 no matter where the index is
+        for (int j = 0; j <= numCoins; j++) {
+            ways[0][j] = 1;
+        }
 
-        // Base case since there is only 1 way to make 0
-        ways[0] = 1;
+        // Build table from the bottom up
+        for (int amount = 1; amount <= target; amount++) {
+            for (int coinIndex = numCoins - 1; coinIndex >= 0; coinIndex--) {
 
-        // Do each coin one at a time
-        for (int coin : coins) {
-            // Update ways for all of the sums that can include this coin
-            for (int sum = coin; sum <= target; sum++) {
-                ways[sum] += ways[sum - coin];
+                // Skip current coin
+                long skipCoin = ways[amount][coinIndex + 1];
+
+                // Use current coin if possible
+                long useCoin = 0;
+                if (amount >= coins[coinIndex]) {
+                    useCoin = ways[amount - coins[coinIndex]][coinIndex];
+                }
+
+                ways[amount][coinIndex] = skipCoin + useCoin;
             }
         }
 
-        // Return final result
-        return ways[target];
-
+        // Return target amount using the smallest coins
+        return ways[target][0];
     }
 
 }
